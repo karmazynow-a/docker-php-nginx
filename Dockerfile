@@ -1,9 +1,16 @@
-FROM alpine:3.14
-LABEL Maintainer="Tim de Pater <code@trafex.nl>"
-LABEL Description="Lightweight container with Nginx 1.20 & PHP 8.0 based on Alpine Linux."
+FROM centos:7
+LABEL Maintainer="Piotr Moszkowicz <piotr@moszkowicz.pl>"
+LABEL Description="Lightweight container with Nginx 1.20 & PHP 8.0 based on CentOS 7."
+
+# Add proper repositories with PHP8
+RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+RUN yum -y install yum-utils
+RUN yum-config-manager --disable 'remi-php*'
+RUN yum-config-manager --enable remi-php80
 
 # Install packages and remove default server definition
-RUN apk --no-cache add \
+RUN yum -y install \
   curl \
   nginx \
   php8 \
