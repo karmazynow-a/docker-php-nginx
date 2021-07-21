@@ -14,12 +14,12 @@ Huge thanks to Tim for his work!
 * Follows the KISS principle (Keep It Simple, Stupid) to make it easy to understand and adjust the image to your needs
 
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/piotrmoszkowicz/centos-docker-php-nginx.svg)](https://hub.docker.com/u/piotrmoszkowicz/centos-docker-php-nginx)
+[![Docker Pulls](https://img.shields.io/docker/pulls/piotrmoszkowicz/centos-docker-php-nginx.svg)](https://hub.docker.com/r/piotrmoszkowicz/centos-docker-php-nginx)
 ![nginx 1.18.0](https://img.shields.io/badge/nginx-1.20-brightgreen.svg)
 ![php 8.0](https://img.shields.io/badge/php-8.0-brightgreen.svg)
 ![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 
-This image can be pulled from Docker Hub under the name [piotrmoszkowicz/centos-docker-php-nginx](https://hub.docker.com/u/piotrmoszkowicz/centos-docker-php-nginx).
+This image can be pulled from Docker Hub under the name [piotrmoszkowicz/centos-docker-php-nginx](https://hub.docker.com/r/piotrmoszkowicz/centos-docker-php-nginx).
 
 ## Usage
 
