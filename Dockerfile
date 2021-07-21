@@ -8,42 +8,45 @@ RUN yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
 RUN yum -y install yum-utils
 RUN yum-config-manager --disable 'remi-php*'
 RUN yum-config-manager --enable remi-php80
+RUN yum -y update
 
 # Install packages and remove default server definition
 RUN yum -y install \
   curl \
   nginx \
-  php8 \
-  php8-ctype \
-  php8-curl \
-  php8-dom \
-  php8-fpm \
-  php8-gd \
-  php8-intl \
-  php8-json \
-  php8-mbstring \
-  php8-mysqli \
-  php8-opcache \
-  php8-openssl \
-  php8-phar \
-  php8-session \
-  php8-xml \
-  php8-xmlreader \
-  php8-zlib \
+  php \
+  php-ctype \
+  php-curl \
+  php-dom \
+  php-fpm \
+  php-gd \
+  php-intl \
+  php-json \
+  php-mbstring \
+  php-mysqli \
+  php-opcache \
+  php-openssl \
+  php-phar \
+  php-session \
+  php-xml \
+  php-xmlreader \
+  php-zlib \
   supervisor
-
-# Create symlink so programs depending on `php` still function
-RUN ln -s /usr/bin/php8 /usr/bin/php
 
 # Configure nginx
 COPY config/nginx.conf /etc/nginx/nginx.conf
 
 # Configure PHP-FPM
-COPY config/fpm-pool.conf /etc/php8/php-fpm.d/www.conf
-COPY config/php.ini /etc/php8/conf.d/custom.ini
+COPY config/fpm-pool.conf /etc/php-fpm.d/www.conf
+COPY config/php.ini /etc/custom.ini
+RUN cat /etc/custom.ini >> /etc/php.ini
+RUN rm /etc/custom.ini
 
 # Configure supervisord
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Create directory for php-fpm
+RUN mkdir -p /run/php-fpm/
 
 # Setup document root
 RUN mkdir -p /var/www/html
@@ -52,7 +55,8 @@ RUN mkdir -p /var/www/html
 RUN chown -R nobody.nobody /var/www/html && \
   chown -R nobody.nobody /run && \
   chown -R nobody.nobody /var/lib/nginx && \
-  chown -R nobody.nobody /var/log/nginx
+  chown -R nobody.nobody /var/log/nginx && \
+  chown -R nobody.nobody /var/log/php-fpm
 
 # Switch to use a non-root user from here on
 USER nobody
