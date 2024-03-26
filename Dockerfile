@@ -1,39 +1,13 @@
-FROM centos:7
-LABEL Maintainer="Piotr Moszkowicz <piotr@moszkowicz.pl>"
-LABEL Description="Lightweight container with Nginx 1.20 & PHP 8.0 based on CentOS 7."
+# Use the official AlmaLinux 9 base image
+FROM almalinux:9
 
-# Add proper repositories with PHP8
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-RUN yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
-RUN yum -y install yum-utils
-RUN yum-config-manager --disable 'remi-php*'
-RUN yum-config-manager --enable remi-php80
-RUN yum -y update
+# Install Nginx and PHP 8 with required extensions
+RUN dnf install -y nginx php php-cli php-fpm php-mysqlnd php-pdo php-gd php-mbstring php-json php-xml php-opcache php-zip
 
-# Install packages and remove default server definition
-RUN yum -y install \
-  curl \
-  nginx \
-  php \
-  php-ctype \
-  php-curl \
-  php-dom \
-  php-fpm \
-  php-gd \
-  php-intl \
-  php-json \
-  php-mbstring \
-  php-mysqli \
-  php-opcache \
-  php-openssl \
-  php-phar \
-  php-session \
-  php-xml \
-  php-xmlreader \
-  php-zlib \
-  supervisor
+# Remove the default Nginx configuration file
+RUN rm -f /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Configure nginx
+# Copy custom Nginx configuration file
 COPY config/nginx.conf /etc/nginx/nginx.conf
 
 # Configure PHP-FPM
@@ -41,9 +15,6 @@ COPY config/fpm-pool.conf /etc/php-fpm.d/www.conf
 COPY config/php.ini /etc/custom.ini
 RUN cat /etc/custom.ini >> /etc/php.ini
 RUN rm /etc/custom.ini
-
-# Configure supervisord
-COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Create directory for php-fpm
 RUN mkdir -p /run/php-fpm/
