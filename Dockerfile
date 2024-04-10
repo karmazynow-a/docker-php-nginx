@@ -1,5 +1,5 @@
 # Use the official AlmaLinux 9 base image
-FROM almalinux:9
+FROM cern/alma9-base:latest
 
 # Install Nginx and PHP 8 with required extensions
 RUN dnf install -y nginx php php-cli php-fpm php-mysqlnd php-pdo php-gd php-mbstring php-json php-xml php-opcache php-zip
@@ -40,7 +40,7 @@ COPY --chown=nobody src/ /var/www/html/
 EXPOSE 8080
 
 # Let supervisord start nginx & php-fpm
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 
 # Configure a healthcheck to validate that everything is up&running
 HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:8080/fpm-ping
